@@ -1,0 +1,184 @@
+{
+  "name": "sentinel-vsc",
+  "displayName": "Sentinel-VSC",
+  "description": "Real-Time Security Guardrail for AI-Assisted Development",
+  "version": "1.0.0",
+  "publisher": "sentinel-security",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "icon": "assets/icon.png",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sentinel.scanFile",
+        "title": "Sentinel: Scan Current File",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "sentinel.fixIssue",
+        "title": "Sentinel: Fix with AI",
+        "icon": "$(wrench)"
+      },
+      {
+        "command": "sentinel.revealSecret",
+        "title": "Sentinel: Reveal Masked Secret",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "sentinel.openPanel",
+        "title": "Sentinel: Open Security Panel"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sentinel-sidebar",
+          "title": "Sentinel Security",
+          "icon": "assets/sentinel-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "sentinel-sidebar": [
+        {
+          "type": "webview",
+          "id": "sentinel.securityPanel",
+          "name": "Security Report"
+        },
+        {
+          "id": "sentinel.issuesTree",
+          "name": "Vulnerabilities"
+        },
+        {
+          "id": "sentinel.owaspTree",
+          "name": "OWASP Coverage"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Sentinel-VSC",
+      "properties": {
+        "sentinel.anthropicApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Anthropic API key for LLM Security Critic"
+        },
+        "sentinel.scanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically scan files on save"
+        },
+        "sentinel.scanOnType": {
+          "type": "boolean",
+          "default": false,
+          "description": "Scan while typing (performance impact)"
+        },
+        "sentinel.maskSecrets": {
+          "type": "boolean",
+          "default": true,
+          "description": "Mask detected secrets before rendering"
+        },
+        "sentinel.minimumGradeWarning": {
+          "type": "string",
+          "default": "C",
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "F"
+          ],
+          "description": "Show warning status bar item below this grade"
+        },
+        "sentinel.enableSAST": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable static analysis (SAST) scanning"
+        },
+        "sentinel.enableLLMCritic": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable LLM-based security critic"
+        },
+        "sentinel.supportedLanguages": {
+          "type": "array",
+          "default": [
+            "javascript",
+            "typescript",
+            "python",
+            "java",
+            "php",
+            "go",
+            "ruby"
+          ],
+          "description": "Languages to scan"
+        }
+      }
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "sentinel.scanFile",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "sentinel.scanFile",
+          "group": "sentinel"
+        },
+        {
+          "command": "sentinel.fixIssue",
+          "group": "sentinel"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "sentinel.scanFile",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.39",
+    "@types/vscode": "^1.115.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.3.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
